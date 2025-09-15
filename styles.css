@@ -3,12 +3,10 @@
     grid-template-columns: auto auto auto auto auto auto auto;
     height: 80%;
     width: 100%;
-    gap: 3%;
+    gap: 2%;
 }
 
 .note {
-    /* text-align: center; */
-    /* justify-content: center; */
     border-style: solid;
     text-align: center;
     width: 100%;
@@ -19,6 +17,11 @@
 .note:active {
     background-color: lightcoral;
 }
+
+.highlight-when-pressed {
+    background-color: lightcoral;
+}
+
 
 
 /* .sharps {

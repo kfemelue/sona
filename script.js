@@ -34,7 +34,7 @@ class Note {
 
 const notes = ["C", "D", "E", "F", "G", "A", "B"];
 const wavetypes = ["sine", "saw", "square", "sawtooth"];
-const selectedWaveType = wavetypes[0];
+const selectedWaveType = wavetypes[2];
 const octave = 1
 
 notes.forEach(note => {
@@ -43,8 +43,40 @@ notes.forEach(note => {
         selectedNote.startNote();
     
         document.getElementById(note).addEventListener("mouseup", () =>{
+            
             selectedNote.stopNote();
         });
     });
 });
 
+notes.forEach(note => {
+    musicalTypingMap = {
+        "C" : "A",
+        "D" : "S",
+        "E" : "D",
+        "F" : "F",
+        "G" : "G",
+        "A" : "H",
+        "B" : "J"
+    }
+
+    window.addEventListener("keydown", event=> {
+        const selectedNote = new Note(note, selectedWaveType, octave);
+        if (event.key.toUpperCase() === musicalTypingMap[note]){
+            document.getElementById(note).className += ' highlight-when-pressed'
+            selectedNote.startNote();
+
+            window.addEventListener("keyup", event=> {
+                document.getElementById(note).className = document.getElementById(note).className.split(" ")[0]
+                if (event.key.toUpperCase() === musicalTypingMap[note]){
+                    selectedNote.stopNote();
+                }
+            });
+
+        }else{
+            console.log(event.key)
+        };
+
+    });
+
+});
