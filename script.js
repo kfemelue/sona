@@ -38,38 +38,40 @@ const selectedWaveType = wavetypes[0];
 const octave = 1
 
 notes.forEach(note => {
-    document.getElementById(note).addEventListener("mousedown", ()=> {
-        const selectedNote = new Note(note, selectedWaveType, octave);
-        selectedNote.startNote();
+    document.getElementById(note).addEventListener("mousedown", async ()=> {
+        let selectedNote = await new Note(note, selectedWaveType, octave);
+        await selectedNote.startNote();
     
-        document.getElementById(note).addEventListener("mouseup", () =>{
+        document.getElementById(note).addEventListener("mouseup", async ()=>{
             
-            selectedNote.stopNote();
+            await selectedNote.stopNote();
+            selectedNote = null;
         });
     });
 });
 
 notes.forEach(note => {
     musicalTypingMap = {
-        "C" : "A",
-        "D" : "S",
-        "E" : "D",
-        "F" : "F",
-        "G" : "G",
-        "A" : "H",
-        "B" : "J"
+        "C" : "a",
+        "D" : "s",
+        "E" : "d",
+        "F" : "f",
+        "G" : "g",
+        "A" : "h",
+        "B" : "j"
     }
 
-    window.addEventListener("keydown", event=> {
-        const selectedNote = new Note(note, selectedWaveType, octave);
-        if (event.key.toUpperCase() === musicalTypingMap[note]){
+    window.addEventListener("keydown", async event=> {
+        let selectedNote = await new Note(note, selectedWaveType, octave);
+        if (event.key === musicalTypingMap[note]){
             document.getElementById(note).className += ' highlight-when-pressed'
-            selectedNote.startNote();
+            await selectedNote.startNote();
 
-            window.addEventListener("keyup", event=> {
+            window.addEventListener("keyup", async event=> {
                 document.getElementById(note).className = document.getElementById(note).className.split(" ")[0]
-                if (event.key.toUpperCase() === musicalTypingMap[note]){
-                    selectedNote.stopNote();
+                if (event.key === musicalTypingMap[note]){
+                    await selectedNote.stopNote();
+                    selectedNote = null;
                 }
             });
 
@@ -80,3 +82,4 @@ notes.forEach(note => {
     });
 
 });
+
