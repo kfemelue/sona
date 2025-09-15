@@ -34,7 +34,7 @@ class Note {
 
 const notes = ["C", "D", "E", "F", "G", "A", "B"];
 const wavetypes = ["sine", "saw", "square", "sawtooth"];
-const selectedWaveType = wavetypes[2];
+const selectedWaveType = wavetypes[0];
 const octave = 1
 
 notes.forEach(note => {
