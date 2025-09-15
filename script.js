@@ -1,30 +1,50 @@
-function play(note, wavetype, octave){
-    console.log("pressed")
-    const noteFrequencies = {
-        "C" : 130.81,
-        "D" : 146.83,
-        "E" : 164.81,
-        "F" : 174.61,
-        "G" : 196,
-        "A" : 220,
-        "B" : 246.94
+class Note {
+    constructor(note, wavetype, octave){
+        this.note = note;
+        this.wavetype = wavetype;
+        this.octave = octave;
+        this.noteFrequencies = {
+            "C" : 130.81,
+            "D" : 146.83,
+            "E" : 164.81,
+            "F" : 174.61,
+            "G" : 196,
+            "A" : 220,
+            "B" : 246.94
+        }
+        this.frequency = this.noteFrequencies[note]*octave;
+        this.audioContext = new AudioContext();
+        this.oscillator = this.audioContext.createOscillator();
+        this.oscillator.type = this.wavetype;
     }
-    //multiply frequency by x to increase or decrease octave i.e. c1 = 32, c2 = 64
-    const frequency = noteFrequencies[note]*octave
-    console.log(frequency)
 
-    const audioContext = new AudioContext();
-    const oscillator = audioContext.createOscillator();
-    oscillator.type = wavetype;
-    console.log(audioContext.currentTime)
-    oscillator.frequency.setValueAtTime( frequency, audioContext.currentTime)
-    oscillator.connect(audioContext.destination);
-    oscillator.start(audioContext.currentTime)
-    oscillator.stop(audioContext.currentTime + 0.25)
+    startNote(){
+        this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime)
+        this.oscillator.connect(this.audioContext.destination);
+        this.oscillator.start(this.audioContext.currentTime);
+    }
+
+    stopNote(){
+        this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime);
+        this.oscillator.connect(this.audioContext.destination);
+        this.oscillator.stop(this.audioContext.currentTime);
+    }
+
 }
 
+const notes = ["C", "D", "E", "F", "G", "A", "B"];
+const wavetypes = ["sine", "saw", "square", "sawtooth"];
+const selectedWaveType = wavetypes[0];
+const octave = 1
 
-document.getElementById("C").addEventListener("click", ()=> {
-    play("C", "sine", 2)
+notes.forEach(note => {
+    document.getElementById(note).addEventListener("mousedown", ()=> {
+        const selectedNote = new Note(note, selectedWaveType, octave);
+        selectedNote.startNote();
+    
+        document.getElementById(note).addEventListener("mouseup", () =>{
+            selectedNote.stopNote();
+        });
+    });
+});
 
-})
