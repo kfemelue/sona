@@ -1,3 +1,5 @@
+// Note class takes in a wavetype, a frequency, and an octave and uses 
+// the OscillatorNode api to create a "beep" sound.
 class Note {
     constructor(note, wavetype, octave){
         this.note = note;
@@ -18,40 +20,23 @@ class Note {
         this.oscillator.type = this.wavetype;
     }
 
-    startNote(){
-        this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime)
-        this.oscillator.connect(this.audioContext.destination);
-        this.oscillator.start(this.audioContext.currentTime);
+    async startNote(){
+        await this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime)
+        await this.oscillator.connect(this.audioContext.destination);
+        await this.oscillator.start(this.audioContext.currentTime);
     }
 
-    stopNote(){
-        this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime);
-        this.oscillator.connect(this.audioContext.destination);
-        this.oscillator.stop(this.audioContext.currentTime);
+    async stopNote(){
+        // this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime);
+        // this.oscillator.connect(this.audioContext.destination);
+        await this.oscillator.stop(this.audioContext.currentTime);
     }
 
 }
 
-const notes = ["C", "D", "E", "F", "G", "A", "B"];
-const wavetypes = ["sine", "saw", "square", "sawtooth"];
-const selectedWaveType = wavetypes[0];
-const octave = 1
-
-notes.forEach(note => {
-    document.getElementById(note).addEventListener("mousedown", async ()=> {
-        let selectedNote = await new Note(note, selectedWaveType, octave);
-        await selectedNote.startNote();
-    
-        document.getElementById(note).addEventListener("mouseup", async ()=>{
-            
-            await selectedNote.stopNote();
-            selectedNote = null;
-        });
-    });
-});
-
-notes.forEach(note => {
-    musicalTypingMap = {
+// takes a note and adds key board key press events to the website
+function createKeyPressEvent(note){
+    const musicalTypingMap = {
         "C" : "a",
         "D" : "s",
         "E" : "d",
@@ -71,15 +56,34 @@ notes.forEach(note => {
                 document.getElementById(note).className = document.getElementById(note).className.split(" ")[0]
                 if (event.key === musicalTypingMap[note]){
                     await selectedNote.stopNote();
-                    selectedNote = null;
+                    // selectedNote = null;
                 }
             });
 
         }else{
             console.log(event.key)
         };
-
     });
 
-});
+}
 
+// Loop to add listenders to website for all notes in notes array
+
+const notes = ["C", "D", "E", "F", "G", "A", "B"];
+const wavetypes = ["sine", "saw", "square", "sawtooth"];
+const selectedWaveType = wavetypes[0];
+const octave = 1;
+
+notes.forEach(note => {
+    createKeyPressEvent(note)
+    document.getElementById(note).addEventListener("mousedown", async ()=> {
+        let selectedNote = await new Note(note, selectedWaveType, octave);
+        await selectedNote.startNote();
+    
+        document.getElementById(note).addEventListener("mouseup", async ()=>{
+            
+            await selectedNote.stopNote();
+            // selectedNote = null;
+        });
+    });
+});
