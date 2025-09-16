@@ -8,3 +8,5 @@ It was built using the [OscillatorNode()](https://developer.mozilla.org/en-US/do
 
 Open the html file in a web browser and click the notes to play.
 The Capital letters are the Notes on a C Major Scale, the lowercase letters are keys you can press on your computer keyboard to play.
+
+Find the deployed app (here)[https://kfemelue.github.io/sona/]
