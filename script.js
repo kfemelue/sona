@@ -27,8 +27,6 @@ class Note {
     }
 
     async stopNote(){
-        // this.oscillator.frequency.setValueAtTime( this.frequency, this.audioContext.currentTime);
-        // this.oscillator.connect(this.audioContext.destination);
         await this.oscillator.stop(this.audioContext.currentTime);
     }
 
@@ -72,7 +70,7 @@ function createKeyPressEvent(note){
 const notes = ["C", "D", "E", "F", "G", "A", "B"];
 const wavetypes = ["sine", "saw", "square", "sawtooth"];
 const selectedWaveType = wavetypes[0];
-const octave = 1;
+const octave = 2;
 
 notes.forEach(note => {
     createKeyPressEvent(note)
